@@ -13,26 +13,50 @@ ORDER BY last_name ASC
 SELECT first_name, last_name
 FROM actor a
 WHERE NOT EXISTS (SELECT *
-FROM film f, film_actor fa
-WHERE a.actor_id = fa.actor_id
-AND fa.film_id = f.film_id)
+					FROM film f, film_actor fa
+				  WHERE a.actor_id = fa.actor_id
+				  AND fa.film_id = f.film_id)
+				  
+-- Mejor forma de hacerlos
+SELECT first_name, last_name
+FROM actor a
+WHERE actor_id NOT IN (SELECT DISTINCT actor_id 
+						FROM film_actor fa)
+				  
+				  
 
 -- 3. Find customers that rented only one film
  
 SELECT first_name, last_name
 FROM customer c
 WHERE (SELECT COUNT(*) 
-FROM rental r 
-WHERE c.customer_id = r.customer_id) = 1
+		FROM rental r 
+	   WHERE c.customer_id = r.customer_id) = 1
+	   
+SELECT c.customer_id, c.first_name, c.last_name
+FROM customer c, rental r
+WHERE c.customer_id = r.customer_id
+AND NOT EXISTS (SELECT * 
+				FROM rental r2 
+				WHERE r.customer_id = r2.customer_id 
+				AND r.rental_id <> r2.rental_id)
 
 -- 4. Find customers that rented more than one film
 
 SELECT first_name, last_name
 FROM customer c
 WHERE (SELECT COUNT(*) 
-FROM rental r 
-WHERE c.customer_id = r.customer_id) > 1
+		FROM rental r 
+	   WHERE c.customer_id = r.customer_id) > 1
 
+SELECT c.customer_id, c.first_name, c.last_name
+FROM customer c, rental r
+WHERE c.customer_id = r.customer_id
+AND EXISTS (SELECT * 
+			FROM rental r2 
+			WHERE r.customer_id = r2.customer_id 
+			AND r.rental_id <> r2.rental_id)
+	   
 -- 5. List the actors that acted in 'BETRAYED REAR' or in 'CATCH AMISTAD'
 
 SELECT first_name, last_name
@@ -50,10 +74,10 @@ WHERE a.actor_id = fa.actor_id
 AND fa.film_id = f.film_id
 AND f.title = 'BETRAYED REAR'
 AND a.actor_id NOT IN (SELECT a2.actor_id 
-FROM actor a2, film f2, film_actor fa2 
-WHERE a2.actor_id = fa2.actor_id 
-AND fa2.film_id = f2.film_id 
-AND f2.title = 'CATCH AMISTAD')
+					 	FROM actor a2, film f2, film_actor fa2 
+						WHERE a2.actor_id = fa2.actor_id 
+						AND fa2.film_id = f2.film_id 
+						AND f2.title = 'CATCH AMISTAD')
 
 -- 7. List the actors that acted in both 'BETRAYED REAR' and 'CATCH AMISTAD'
 
@@ -63,10 +87,10 @@ WHERE a.actor_id = fa.actor_id
 AND fa.film_id = f.film_id
 AND f.title = 'BETRAYED REAR'
 AND a.actor_id IN (SELECT a2.actor_id 
-FROM actor a2, film f2, film_actor fa2 
-WHERE a2.actor_id = fa2.actor_id 
-AND fa2.film_id = f2.film_id 
-AND f2.title = 'CATCH AMISTAD')
+					FROM actor a2, film f2, film_actor fa2 
+					WHERE a2.actor_id = fa2.actor_id 
+					AND fa2.film_id = f2.film_id 
+					AND f2.title = 'CATCH AMISTAD')
 
 -- 8. List all the actors that didn't work in 'BETRAYED REAR' or 'CATCH AMISTAD'
 
@@ -76,12 +100,10 @@ WHERE a.actor_id = fa.actor_id
 AND fa.film_id = f.film_id
 AND f.title <> 'BETRAYED REAR'
 AND a.actor_id NOT IN (SELECT a2.actor_id 
-FROM actor a2, film f2, film_actor fa2 
-WHERE a2.actor_id = fa2.actor_id 
-AND fa2.film_id = f2.film_id 
-AND f2.title = 'CATCH AMISTAD')
-
-
+						FROM actor a2, film f2, film_actor fa2 
+						WHERE a2.actor_id = fa2.actor_id 
+						AND fa2.film_id = f2.film_id 
+						AND f2.title = 'CATCH AMISTAD')
 
 
 
