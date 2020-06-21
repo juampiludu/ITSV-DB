@@ -39,9 +39,52 @@ ORDER BY last_name, 'store id';
 --    - show store's city, country, manager info and total sales (money)
 --    - (optional) Use concat to show city and country and manager first and last name
 
-SELECT city, country.country, staff.first_name, staff.last_name, payment.amount
-FROM city
-INNER JOIN country USING(country_id)
-INNER JOIN staff USING()
+select staff.store_id, concat(city.city, ", ", country.country) as country, concat(staff.first_name, " ", staff.last_name), sum(amount) as "total sales"
+from payment
+inner join rental using(rental_id)
+inner join inventory using(inventory_id)
+inner join store using(store_id)
+inner join address using(address_id)
+inner join city using(city_id)
+inner join country using(country_id)
+inner join staff
+where staff.staff_id=store.manager_staff_id
+group by store_id
+
 
 -- 8. Which actor has appeared in the most films?
+
+select actor
+from (select concat(first_name, " ", last_name) as actor, count(film_actor.actor_id) as total
+		from actor 
+		inner join film_actor using(actor_id) 
+		group by actor_id
+		order by total desc
+		limit 1) as a
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
