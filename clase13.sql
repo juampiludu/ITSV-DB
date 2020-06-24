@@ -55,7 +55,7 @@ where rating = "R";
 -- 	Find a film that was not yet returned. And use that rental id. Pick the latest that was rented for example.
 -- 	Use the id to return the film.
 
-set @inven_id = (select *
+set @inven_id = (select inventory.inventory_id
 from film
 inner join inventory using(film_id)
 left join rental using (inventory_id)
