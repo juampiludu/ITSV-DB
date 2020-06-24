@@ -91,6 +91,9 @@ UPDATE sakila.rental
 SET return_date=date_add(current_timestamp, interval 7 day) , last_update=CURRENT_TIMESTAMP
 WHERE inventory_id=@inven_id;
 
+-- test
+select * from inventory left join rental using(inventory_id) where inventory_id = 2047
+
 -- Try to delete a film
 -- 	Check what happens, describe what to do.
 -- 	Write all the necessary delete statements to entirely remove the film from the DB.
@@ -129,7 +132,7 @@ limit 1)
 INSERT INTO rental
 (rental_date, inventory_id, customer_id, return_date, staff_id, last_update)
 values (CURRENT_TIMESTAMP, @randomId, (select customer_id from customer order by customer_id desc limit 1), 
-		'2020-06-30 22:04:30.0', (select staff_id from staff limit 1), CURRENT_TIMESTAMP);
+		date_add(current_timestamp, interval 7 day), (select staff_id from staff limit 1), CURRENT_TIMESTAMP);
 	
 INSERT INTO payment
 (customer_id, staff_id, rental_id, amount, payment_date, last_update)
