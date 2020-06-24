@@ -127,6 +127,7 @@ set @randomId = (select inventory.inventory_id
 from rental
 left join inventory using(inventory_id)
 where return_date is not null
+order by inventory.inventory_id desc
 limit 1)
 
 INSERT INTO rental
