@@ -1,0 +1,114 @@
+1)
+
+ - sudo docker run --name my-first-redis -d redis
+
+
+2)
+
+ - sudo docker exec -it my-first-redis sh
+ 
+ - # redis-cli
+ 
+ 	$ ping (PONG recieved)
+ 
+	 $ set name pnap
+	 
+	 $ get name
+	 	"pnap"
+	 	
+
+3)
+
+    Crear:
+        > set stringExample "hola mundo" 
+    Buscar:
+        > get stringExample
+    Borrar: 
+        > del stringExample
+
+4)
+
+    Crear:
+        > hset hashesExample clave1 "valor 1"
+        > hmset hashesExample clave2 "valor 2" clave3 "valor 3"
+    
+    Buscar:
+        > hget hashesExample clave1
+        > hgetall hashesExample
+
+    Borrar: 
+        > hdel hashesExample clave1
+
+5)
+
+    Crear:
+    	> lpush mylist a
+    	> lpush mylist b
+    	> lpush mylist c
+    	
+    Buscar:
+    	> lrange mylist 0 2
+    	
+    Borrar:
+    	> lpop mylist
+    	
+
+6)
+
+	Crear:
+		> sadd tutorials members
+		> sadd tutorials mysql
+		
+	Buscar:
+		> smembers tutorials
+		
+	Borrar:
+		> spop tutorials 2
+		
+
+7)
+
+	Crear:
+		> zadd tutorials 1 redis
+		> zadd tutorials 2 mysql
+		
+	Buscar:
+		> zrange tutorials 0 10 withscores
+		
+	Borrar:
+		> ZREMRANGEBYSCORE tutorials 0 10
+		
+
+8)
+
+	> subscribe redisChat
+	> publish redisChat "hi"
+	> unsubscribe redisChat
+
+
+9)
+
+	> multi
+	> set tutorial redis
+	> get turorial
+	> incr visitors
+	> exec
+	
+
+10)
+
+	> save
+	> config get dir
+	> bgsave
+	
+
+11)
+
+	> redis-benchmark -h 127.0.0.1 -p 6379 -t set,lpush -n 100000 -q
+	SET: 97943.19 requests per second
+	LPUSH: 101522.84 requests per second
+	
+
+12)
+
+	En el repo
